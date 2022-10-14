@@ -9,7 +9,8 @@ class KeyboardListener:
         self.thread.start()
 
     def on_press(self, key):
-        self.command_buffer.append(key)
+        if isinstance(keyboard.KeyCode):
+            self.command_buffer.append(key.char)
 
     def run(self,):
         # Collect events until released

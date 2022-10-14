@@ -17,13 +17,13 @@ class RoombaController:
     def turn_left(self, rot_angle_deg):
         self.move(0, self.default_rot_speed)
         wait_time = rot_angle_deg / self.default_rot_speed
-        time.wait(wait_time)
+        time.sleep(wait_time)
         self.stop()
 
     def turn_right(self, rot_angle_deg):
         self.move(0, -self.default_rot_speed)
         wait_time = rot_angle_deg / self.default_rot_speed
-        time.wait(wait_time)
+        time.sleep(wait_time)
         self.stop()
 
     def stop(self):
@@ -33,14 +33,14 @@ class RoombaController:
         self.move(self.default_lin_speed, 0)
         wait_time = distance / self.default_lin_speed
         if not keep_going:
-            time.wait(wait_time)
+            time.sleep(wait_time)
             self.stop()
     
     def move_backward(self, distance, keep_going=True):
         self.move(-self.default_lin_speed, 0)
         wait_time = distance / self.default_lin_speed
         if not keep_going:
-            time.wait(wait_time)
+            time.sleep(wait_time)
             self.stop()
 
     def speed_up_linear(self, delta_speed):

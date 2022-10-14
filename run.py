@@ -22,11 +22,11 @@ print("Controller created...")
 keyboard_listener = KeyboardListener()
 
 cmd_args = {
-    'w': (controller.move_forward, 1),
-    'd': (controller.turn_left, 1),
-    'x': (controller.move_backward, 1),
+    'w': (controller.move_forward, (1,)),
+    'd': (controller.turn_left, (1, )),
+    'x': (controller.move_backward, (1,)),
     's': (controller.stop, ()),
-    'a': (controller.turn_right, 1), 
+    'a': (controller.turn_right, (1,)), 
     'v': (controller.turn_on_vacuum, ()),
     'b': (controller.turn_off_vacuum, ()),
 }
