@@ -5,6 +5,8 @@ from pyroombaadapter import PyRoombaAdapter
 from perception import SensorPreprocessor
 from audio import Voice
 from control import RoombaController
+from roombai.roombai.keyboard_listener import KeyboardListener
+from keyboard_listener import KeyboardListener
 
 print("Starting...")
 PORT = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AR0JVPTN-if00-port0"
@@ -17,25 +19,29 @@ voice = Voice()
 print("Roomba Voice created...")
 controller = RoombaController(adapter)
 print("Controller created...")
+keyboard_listener = KeyboardListener()
 
 cmd_args = {
-    'fwd': (0.2, math.radians(0)),
-    'right': (-0.2, math.radians(-20)),
-    'left': (-0.2, math.radians(20)),
-    'stop': (0, 0)
+    'w': (controller.move_forward, 1),
+    'd': (controller.turn_left, 1),
+    'x': (controller.move_backward, 1),
+    's': (controller.stop, ()),
+    'a': (controller.turn_right, 1), 
+    'v': (controller.turn_on_vacuum, ()),
+    'b': (controller.turn_off_vacuum, ()),
 }
 
 while True:
     time.sleep(0.3)
+    current_cmd = None
     sensor_state = int.from_bytes(adapter.request_data(), 'little')
     if sensor_state > 0:
         print(f"Sensor {sensor_state} triggered!")
         print("Turning around ...")
-        controller.move_backward(0.4, keep_going=False)
-        voice.sound_off()
-        controller.turn_right(90)
-        controller.move_forward(0.2, keep_going=False)
-        controller.turn_right(90)
-        
+        current_cmd = 's'
     else:
-        controller.move_forward(0.2, keep_going=True)
+        if len(keyboard_listener.command_buffer):
+            current_cmd = keyboard_listener.command_buffer.pop(0)
+    cmd_args[current_cmd][0](*cmd_args[current_cmd][1])
+            
+        
