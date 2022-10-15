@@ -2,11 +2,12 @@ import time
 import math
 import numpy as np
 from pyroombaadapter import PyRoombaAdapter
-from perception import SensorPreprocessor
+from perception import SensorPreprocessor, DetectionPreprocessor
 from audio import Voice
 from control import RoombaController
-from roombai.roombai.keyboard_listener import KeyboardListener
 from keyboard_listener import KeyboardListener
+from detect.detector_wrapper import DetectorWrapper
+from detect.dataloader import StreamLoader
 
 print("Starting...")
 PORT = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AR0JVPTN-if00-port0"
@@ -15,6 +16,10 @@ print("Adapter created...")
 adapter.change_mode_to_full()
 sensor_preprocessor = SensorPreprocessor(adapter, 1, 5)
 print("Sensor preprocessor created...")
+detector_wrapper = DetectorWrapper()
+stream_loader = StreamLoader(0)
+visual_preprocessor = DetectionPreprocessor(stream_loader, detector_wrapper)
+print("Detection Preprocessor created...")
 voice = Voice()
 print("Roomba Voice created...")
 controller = RoombaController(adapter)
@@ -22,9 +27,9 @@ print("Controller created...")
 keyboard_listener = KeyboardListener()
 
 cmd_args = {
-    'w': (controller.move_forward, (1,)),
+    'w': (controller.move_forward, (.1,)),
     'd': (controller.turn_left, (1, )),
-    'x': (controller.move_backward, (1,)),
+    'x': (controller.move_backward, (.1,)),
     's': (controller.stop, ()),
     'a': (controller.turn_right, (1,)), 
     'v': (controller.turn_on_vacuum, ()),

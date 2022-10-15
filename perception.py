@@ -2,6 +2,17 @@ import cv2
 import time
 import threading
 
+class DetectionPreprocessor:
+    def __init__(self, stream_loader, detector_wrapper):
+        self.stream_loader = stream_loader 
+        self.detector = detector_wrapper
+        self.detections = []
+
+    def detect(self, ):
+        img, og_img = next(iter(self.stream_loader))
+        pred = self.detector.detect(img)
+        return pred
+
 class VideoStream:
     def __init__(self, stream_address, fps=5.0):
         self.address = stream_address
@@ -44,7 +55,7 @@ class FramePreprocessor:
         return frame_data
 
 class SensorPreprocessor:
-    def __init__(self, roomba_adapter, n_steps, fps):
+    def __init__(self, roomba_adapter, n_steps=1, fps=5):
         self.roomba = roomba_adapter
         self.n_steps = n_steps
         self.wait_time = 1 / fps
