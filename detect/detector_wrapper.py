@@ -1,7 +1,4 @@
 
-
-
-from re import L
 from models.common import DetectMultiBackend
 from utils.general import (cv2, non_max_suppression, scale_boxes)
 from utils.plots import Annotator, colors
@@ -91,7 +88,7 @@ class DetectorWrapper:
     def show_annotated_frame(self, im, im0, pred):
         annotated_frame = self.annotate_frame(im, im0, pred)
         cv2.imshow('frame',annotated_frame)
-        cv2.waitKey(0)
+        cv2.waitKey(1)
 
 
 from dataloader import StreamLoader

@@ -24,7 +24,7 @@ class Runner:
             if num_detections > self._current_detections:
                 save_img_path = str(time.asctime(time.localtime())) + '.jpg'
                 self._detector_wrapper.save_annotated_frame(img, img0, detections, save_img_path)
-                #self._detector_wrapper.show_annotated_frame(img, img0, detections)
+                self._detector_wrapper.show_annotated_frame(img, img0, detections)
                 
                 info = str(len(detections)) #+ detections[0]
                 self._alerter.send_alert(
